@@ -3,9 +3,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
@@ -18,16 +21,20 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity
 {
+    private FloatingActionButton _addButton;
     private RecyclerView _recyclerView1;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         _recyclerView1 = (RecyclerView) findViewById(R.id.recyclerView1);
 
+        initAddButton();
+        loadRecyclearView();
+    }
+    private void loadRecyclearView() {
         AsyncHttpClient ahc = new AsyncHttpClient();
         String url = "https://stmikpontianak.net/011100862/tampilMahasiswa.php";
 
@@ -50,6 +57,20 @@ public class MainActivity extends AppCompatActivity
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error)
             {
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void initAddButton() {
+        _addButton = findViewById(R.id.addButoon);
+
+        _addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AddMahasiswaActivity.class);
+                startActivity(intent);
+
+                loadRecyclearView();
             }
         });
     }
